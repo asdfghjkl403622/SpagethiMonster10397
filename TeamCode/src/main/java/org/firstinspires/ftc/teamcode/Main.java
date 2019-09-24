@@ -107,11 +107,13 @@ public class Main extends OpMode{
 
         robot.leftDrive.setPower(left);
         robot.rightDrive.setPower(right);
+        //suction system change boolean into numbers so the motors can understand it.;
         if (succ) {
             succDouble = 100;
         } else {
             succDouble = 0;
         }
+
         if (eject) {
             succDouble = -100;
         } else {

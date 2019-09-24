@@ -54,7 +54,7 @@ public class HardwarePushbot
     /* Public OpMode members. */
     public DcMotor  leftDrive   = null;
     public DcMotor  rightDrive  = null;
-    //this is the hardware mapping for the succ and eject
+    //this identifies the servo motors and allows the phone to identify
     public DcMotor leftSucc = null;
     public DcMotor rightSucc = null;
 
@@ -76,13 +76,13 @@ public class HardwarePushbot
         // Define and Initialize Motors
         leftDrive  = hwMap.get(DcMotor.class, "left_drive");
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
-        //hardware map for the succ and eject motors
+        //this renames the motors in the hardware map
         leftSucc = hwMap.get(DcMotor.class, "left_succ");
         rightSucc = hwMap.get(DcMotor.class, "right_succ");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        //set succ and eject to correct hardware directions
+        //this sets the input of the motors
         leftSucc.setDirection(DcMotor.Direction.FORWARD);
         rightSucc.setDirection(DcMotor.Direction.REVERSE);
 
