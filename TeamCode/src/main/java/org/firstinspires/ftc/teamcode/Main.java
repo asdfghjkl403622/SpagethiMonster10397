@@ -29,10 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
@@ -95,13 +93,32 @@ public class Main extends OpMode{
     public void loop() {
         double left;
         double right;
+        boolean succ;
+        boolean eject;
+        double succDouble;
+
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
+        succ = gamepad2.left_bumper;
+        eject = gamepad2.right_bumper;
+
 
         robot.leftDrive.setPower(left);
         robot.rightDrive.setPower(right);
+        if (succ) {
+            succDouble = 100;
+        } else {
+            succDouble = 0;
+        }
+        if (eject) {
+            succDouble = -100;
+        } else {
+            succDouble = 0;
+        }
+        robot.leftSucc.setPower(succDouble);
+        robot.rightSucc.setPower(succDouble);
 
 
     }
