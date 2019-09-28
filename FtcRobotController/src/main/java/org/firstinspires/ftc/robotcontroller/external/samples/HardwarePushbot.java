@@ -63,6 +63,8 @@ public class HardwarePushbot
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
+    private final double intakeSpeed = 1;
+    private final double ejectSpeed = -1;
     /* Constructor */
     public HardwarePushbot(){
 
@@ -94,8 +96,8 @@ public class HardwarePushbot
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftSucc.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightSucc.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -103,5 +105,26 @@ public class HardwarePushbot
         // Define and initialize ALL installed servos.
 
     }
+
+    public void intakeBlock() {
+        leftSucc.setPower(intakeSpeed);
+        rightSucc.setPower(intakeSpeed);
+    }
+
+    public void ejectBlock() {
+        leftSucc.setPower(ejectSpeed);
+        rightSucc.setPower(ejectSpeed);
+    }
+
+    public void drive(double leftSpeed, double rightSpeed) {
+        leftDrive.setPower(leftSpeed);
+        rightDrive.setPower(rightSpeed);
+    }
+
+    public void driveInches(double distance) {
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
  }
 

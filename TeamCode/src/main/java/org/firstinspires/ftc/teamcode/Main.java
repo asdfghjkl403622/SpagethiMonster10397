@@ -32,8 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
-
 /**
  * This file provides basic Telop driving for a Pushbot robot.
  * The code is structured as an Iterative OpMode
@@ -54,7 +52,8 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 public class Main extends OpMode{
 
     /* Declare OpMode members. */
-    HardwarePushbot robot       = new HardwarePushbot(); // use the class created to define a Pushbot's hardware
+//    HardwarePushbot robot       = new HardwarePushbot(); // use the class created to define a Pushbot's hardware
+    Robot robot = new Robot();
     // could also use HardwarePushbotMatrix class.
                  // sets rate to move servo
 
@@ -91,37 +90,30 @@ public class Main extends OpMode{
      */
     @Override
     public void loop() {
-        double left;
-        double right;
+
         boolean succ;
         boolean eject;
-        double succDouble;
+        boolean grab;
+        boolean notGrab;
+
 
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
         succ = gamepad2.left_bumper;
         eject = gamepad2.right_bumper;
+        grab = gamepad2.b;
+        notGrab = gamepad2.a;
 
+        robot.grabControl(grab, notGrab);
+        robot.drive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
 
-        robot.leftDrive.setPower(left);
-        robot.rightDrive.setPower(right);
-        //suction system change boolean into numbers so the motors can understand it.;
+        //suction system change boolean into numbers so the motors can understand it.
         if (succ) {
-            succDouble = 100;
-        } else {
-            succDouble = 0;
+            robot.intakeBlock();
         }
-
         if (eject) {
-            succDouble = -100;
-        } else {
-            succDouble = 0;
+            robot.ejectBlock();
         }
-        robot.leftSucc.setPower(succDouble);
-        robot.rightSucc.setPower(succDouble);
-
 
     }
 
