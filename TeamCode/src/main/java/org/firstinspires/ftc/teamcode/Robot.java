@@ -9,9 +9,9 @@ public class Robot {
     public DcMotor  leftDrive   = null;
     public DcMotor  rightDrive  = null;
     //this identifies the servo motors and allows the phone to identify
-    // public DcMotor leftSucc = null;
-    // public DcMotor rightSucc = null;
-    // public DcMotor Grab = null;
+    public DcMotor leftIntake = null;
+    public DcMotor rightIntake = null;
+    public DcMotor Grab = null;
     public static final double COUNTS_PER_INCH = 42.780848752;
 
 
@@ -37,32 +37,32 @@ public class Robot {
         leftDrive  = hwMap.get(DcMotor.class, "left_drive");
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
         //this renames the motors in the hardware map
-        //leftSucc = hwMap.get(DcMotor.class, "left_succ");
-        //rightSucc = hwMap.get(DcMotor.class, "right_succ");
+        leftIntake = hwMap.get(DcMotor.class, "left_intake");
+        rightIntake = hwMap.get(DcMotor.class, "right_intake");
         //Define and initialize grab motor
-        //Grab = hwMap.get(DcMotor.class, "Grab");
+        Grab = hwMap.get(DcMotor.class, "Grab");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         //this sets the input of the motors
-        //leftSucc.setDirection(DcMotor.Direction.FORWARD);
-        //rightSucc.setDirection(DcMotor.Direction.REVERSE);
+        leftIntake.setDirection(DcMotor.Direction.FORWARD);
+        rightIntake.setDirection(DcMotor.Direction.REVERSE);
         //Sets motor directions for the grab motors
-        //Grab.setDirection(DcMotor.Direction.FORWARD);
+        Grab.setDirection(DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         leftDrive.setPower(0);
         rightDrive.setPower(0);
-        //leftSucc.setPower(0);
-        //rightSucc.setPower(0);
-        //Grab.setPower(0);
+        leftIntake.setPower(0);
+        rightIntake.setPower(0);
+        Grab.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //leftSucc.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //rightSucc.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         // Define and initialize ALL installed servos.
@@ -70,12 +70,12 @@ public class Robot {
     }
 
     public void intakeBlock() {
-        //leftSucc.setPower(intakeSpeed);
-        //rightSucc.setPower(intakeSpeed);
+        leftIntake.setPower(intakeSpeed);
+        rightIntake.setPower(intakeSpeed);
     }
     public void ejectBlock() {
-        //leftSucc.setPower(ejectSpeed);
-        //rightSucc.setPower(ejectSpeed);
+        leftIntake.setPower(ejectSpeed);
+        rightIntake.setPower(ejectSpeed);
     }
     public void drive(double leftSpeed, double rightSpeed) {
         leftDrive.setPower(leftSpeed);
@@ -83,12 +83,12 @@ public class Robot {
     }
 
     public void grabControl(boolean grab, boolean release) {
-//        if (grab) {
-//            Grab.setPower(grabSpeedGrab);
-//        }
-//        if (release) {
-//            Grab.setPower(grabSpeedRelease);
-//        }
+        if (grab) {
+            Grab.setPower(grabSpeedGrab);
+        }
+        if (release) {
+            Grab.setPower(grabSpeedRelease);
+        }
     }
 
 

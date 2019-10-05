@@ -91,7 +91,7 @@ public class Main extends OpMode{
     @Override
     public void loop() {
 
-        boolean succ;
+        boolean intake;
         boolean eject;
         boolean grab;
         boolean notGrab;
@@ -99,7 +99,7 @@ public class Main extends OpMode{
 
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        succ = gamepad2.left_bumper;
+        intake = gamepad2.left_bumper;
         eject = gamepad2.right_bumper;
         grab = gamepad2.b;
         notGrab = gamepad2.a;
@@ -108,7 +108,7 @@ public class Main extends OpMode{
         robot.drive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
 
         //suction system change boolean into numbers so the motors can understand it.
-        if (succ) {
+        if (intake) {
             robot.intakeBlock();
         }
         if (eject) {
