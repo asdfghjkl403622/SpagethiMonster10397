@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
+
 @Autonomous(name = "Autonomus Tank", group = "Pushbot")
 public class Autonomus extends LinearOpMode {
 
@@ -29,12 +33,21 @@ public class Autonomus extends LinearOpMode {
         robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
-        driveInches(0.25, 4 * Math.PI, 200);
-        turnDegrees(0.25, -90, 200);
-        driveInches(0.25, 12, 400);
+        driveInches(0.25, 16, 200);
+        turnDegrees(0.25, 90, 200);
+        driveInches(0.25, 30, 400);
+        turnDegrees(0.25, -90, 400);
+        //Loading the OpenCV core library
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
+        //Instantiating the Imagecodecs class
+        Imgcodecs imageCodecs = new Imgcodecs();
 
+        //Reading the Image from the file
+        String file = "C:/EXAMPLES/OpenCV/sample.jpg";
+        Mat matrix = Imgcodecs.imread(file);
 
+        System.out.println("Image Loaded");
     }
 
     public void driveInches(double speed, double Inches, double timeoutS) {

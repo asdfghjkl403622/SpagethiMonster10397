@@ -1,4 +1,7 @@
-//
+apply plugin: 'com.android.application'
+dependencies {
+    compile project(path: ':openCVLibrary')
+}//
 // build.gradle in TeamCode
 //
 // Most of the definitions for building your module reside in a common, shared
