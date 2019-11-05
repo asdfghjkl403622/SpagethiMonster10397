@@ -31,6 +31,7 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -54,17 +55,12 @@ public class HardwarePushbot
     /* Public OpMode members. */
     public DcMotor  leftDrive   = null;
     public DcMotor  rightDrive  = null;
-    //this identifies the servo motors and allows the phone to identify
-    public DcMotor leftSucc = null;
-    public DcMotor rightSucc = null;
 
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
-    private final double intakeSpeed = 1;
-    private final double ejectSpeed = -1;
     /* Constructor */
     public HardwarePushbot(){
 
@@ -78,53 +74,23 @@ public class HardwarePushbot
         // Define and Initialize Motors
         leftDrive  = hwMap.get(DcMotor.class, "left_drive");
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
-        //this renames the motors in the hardware map
-        leftSucc = hwMap.get(DcMotor.class, "left_succ");
-        rightSucc = hwMap.get(DcMotor.class, "right_succ");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        //this sets the input of the motors
-        leftSucc.setDirection(DcMotor.Direction.FORWARD);
-        rightSucc.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
         leftDrive.setPower(0);
         rightDrive.setPower(0);
-        leftSucc.setPower(0);
-        rightSucc.setPower(0);
+
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftSucc.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightSucc.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         // Define and initialize ALL installed servos.
 
     }
-
-    public void intakeBlock() {
-        leftSucc.setPower(intakeSpeed);
-        rightSucc.setPower(intakeSpeed);
-    }
-
-    public void ejectBlock() {
-        leftSucc.setPower(ejectSpeed);
-        rightSucc.setPower(ejectSpeed);
-    }
-
-    public void drive(double leftSpeed, double rightSpeed) {
-        leftDrive.setPower(leftSpeed);
-        rightDrive.setPower(rightSpeed);
-    }
-
-    public void driveInches(double distance) {
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
  }
 

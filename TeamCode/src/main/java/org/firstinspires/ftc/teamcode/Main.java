@@ -29,8 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -52,8 +56,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class Main extends OpMode{
 
     /* Declare OpMode members. */
-//    HardwarePushbot robot       = new HardwarePushbot(); // use the class created to define a Pushbot's hardware
-    Robot robot = new Robot();
+    HardwarePushbot robot       = new HardwarePushbot(); // use the class created to define a Pushbot's hardware
     // could also use HardwarePushbotMatrix class.
                  // sets rate to move servo
 
@@ -90,30 +93,16 @@ public class Main extends OpMode{
      */
     @Override
     public void loop() {
-
-        boolean intake;
-        boolean eject;
-        boolean grab;
-        boolean notGrab;
-
-
+        double left;
+        double right;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        intake = gamepad2.left_bumper;
-        eject = gamepad2.right_bumper;
-        grab = gamepad2.b;
-        notGrab = gamepad2.a;
+        left = -gamepad1.left_stick_y;
+        right = -gamepad1.right_stick_y;
 
-        robot.grabControl(grab, notGrab);
-        robot.drive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
+        robot.leftDrive.setPower(left);
+        robot.rightDrive.setPower(right);
 
-        //suction system change boolean into numbers so the motors can understand it.
-        if (intake) {
-            robot.intakeBlock();
-        }
-        if (eject) {
-            robot.ejectBlock();
-        }
 
     }
 
