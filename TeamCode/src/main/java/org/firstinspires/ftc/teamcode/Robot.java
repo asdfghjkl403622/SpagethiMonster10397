@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Robot {
@@ -12,6 +14,8 @@ public class Robot {
     public DcMotor leftIntake = null;
     public DcMotor rightIntake = null;
     public DcMotor Grab = null;
+    public Servo platformGrabLeft = null;
+    public Servo platformGrabRight = null;
     public static final double COUNTS_PER_INCH = 42.780848752;
 
 
@@ -23,6 +27,7 @@ public class Robot {
     private final double ejectSpeed = -1;
     private final double grabSpeedRelease = 1;
     private final double grabSpeedGrab = -1;
+    private final double platformGrabSpeed = 1;
     /* Constructor */
     public Robot(){
 
@@ -41,14 +46,20 @@ public class Robot {
         rightIntake = hwMap.get(DcMotor.class, "right_intake");
         //Define and initialize grab motor
         Grab = hwMap.get(DcMotor.class, "Grab");
+        //Define and initialize platform grabbing servos
+        platformGrabLeft = hwMap.get(Servo.class, "platform_Grab_Left");
+        platformGrabRight = hwMap.get(Servo.class, "platform_Grab_Right");
 
-        leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        leftDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         //this sets the input of the motors
         leftIntake.setDirection(DcMotor.Direction.FORWARD);
         rightIntake.setDirection(DcMotor.Direction.REVERSE);
         //Sets motor directions for the grab motors
         Grab.setDirection(DcMotor.Direction.FORWARD);
+        //set platform grab motor directions
+        platformGrabLeft.setDirection(Servo.Direction.FORWARD);
+        platformGrabRight.setDirection(Servo.Direction.FORWARD);
 
         // Set all motors to zero power
         leftDrive.setPower(0);
@@ -57,12 +68,17 @@ public class Robot {
         rightIntake.setPower(0);
         Grab.setPower(0);
 
+
+
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Grab.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
 
 
         // Define and initialize ALL installed servos.

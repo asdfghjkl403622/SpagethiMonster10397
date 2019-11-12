@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+import org.firstinspires.ftc.teamcode.Robot;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -56,7 +57,10 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 public class Main extends OpMode{
 
     /* Declare OpMode members. */
-    HardwarePushbot robot       = new HardwarePushbot(); // use the class created to define a Pushbot's hardware
+    Robot robot = new Robot(); // use the class created to define a Pushbot's hardware
+
+    public Main() {
+    }
     // could also use HardwarePushbotMatrix class.
                  // sets rate to move servo
 
@@ -93,15 +97,60 @@ public class Main extends OpMode{
      */
     @Override
     public void loop() {
+        boolean intake;
+        double eject;
         double left;
         double right;
+        boolean agitatorIntake;
+        double agitatorEject;
+        boolean platformServoPickUp;
+        boolean platformServoPutDown;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
+        intake = gamepad2.right_bumper;
+        eject = gamepad2.right_trigger;
+        agitatorIntake = gamepad2.left_bumper;
+        agitatorEject = gamepad2.left_trigger;
+        platformServoPickUp = gamepad2.a;
+        platformServoPutDown = gamepad2.b;
 
         robot.leftDrive.setPower(left);
         robot.rightDrive.setPower(right);
+        if (intake) {
+            robot.leftIntake.setPower(1);
+            robot.rightIntake.setPower(1);
+        } else if (eject > (Math.PI / 30)) {
+            robot.rightIntake.setPower(-1);
+            robot.leftIntake.setPower(-1);
+        }
+        else {
+            robot.rightIntake.setPower(0);
+            robot.leftIntake.setPower(0);
+        }
+
+        if (agitatorIntake) {
+            robot.Grab.setPower(-1);
+        }
+        else if (agitatorEject > (Math.PI / 30)) {
+            robot.Grab.setPower(1);
+        }
+        else {
+            robot.Grab.setPower(0);
+        }
+
+        if (platformServoPickUp) {
+            robot.platformGrabRight.setPosition(1);
+            robot.platformGrabLeft.setPosition(1);
+        }
+        else if (platformServoPutDown) {
+            robot.platformGrabLeft.setPosition(0);
+            robot.platformGrabRight.setPosition(0);
+        }
+
+
+
 
 
     }
