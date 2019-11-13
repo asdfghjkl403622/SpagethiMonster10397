@@ -57,7 +57,7 @@ public class Robot {
         rightIntake.setDirection(DcMotor.Direction.REVERSE);
         //Sets motor directions for the grab motors
         Grab.setDirection(DcMotor.Direction.FORWARD);
-        //set platform grab motor directions
+        //set platform grab servo directions
         platformGrabLeft.setDirection(Servo.Direction.FORWARD);
         platformGrabRight.setDirection(Servo.Direction.FORWARD);
 
@@ -78,7 +78,9 @@ public class Robot {
         rightIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Grab.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
+        // set default servo positions
+        platformGrabLeft.setPosition(0); // change 0 to wanted servo position
+        platformGrabRight.setPosition(0);
 
 
         // Define and initialize ALL installed servos.
