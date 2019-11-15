@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,8 +13,7 @@ public class Robot {
     public DcMotor leftIntake = null;
     public DcMotor rightIntake = null;
     public DcMotor Grab = null;
-    public Servo platformGrabLeft = null;
-    public Servo platformGrabRight = null;
+    public DcMotor platformGrab = null;
     public static final double COUNTS_PER_INCH = 42.780848752;
 
 
@@ -47,8 +45,8 @@ public class Robot {
         //Define and initialize grab motor
         Grab = hwMap.get(DcMotor.class, "Grab");
         //Define and initialize platform grabbing servos
-        platformGrabLeft = hwMap.get(Servo.class, "platform_Grab_Left");
-        platformGrabRight = hwMap.get(Servo.class, "platform_Grab_Right");
+        platformGrab = hwMap.get(DcMotor.class, "platform_Grab");
+
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
@@ -58,8 +56,8 @@ public class Robot {
         //Sets motor directions for the grab motors
         Grab.setDirection(DcMotor.Direction.FORWARD);
         //set platform grab motor directions
-        platformGrabLeft.setDirection(Servo.Direction.FORWARD);
-        platformGrabRight.setDirection(Servo.Direction.FORWARD);
+        platformGrab.setDirection(DcMotor.Direction.FORWARD);
+
 
         // Set all motors to zero power
         leftDrive.setPower(0);
@@ -67,6 +65,7 @@ public class Robot {
         leftIntake.setPower(0);
         rightIntake.setPower(0);
         Grab.setPower(0);
+        platformGrab.setPower(0);
 
 
 
@@ -77,6 +76,7 @@ public class Robot {
         leftIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Grab.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        platformGrab.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
 
@@ -93,6 +93,10 @@ public class Robot {
         leftIntake.setPower(ejectSpeed);
         rightIntake.setPower(ejectSpeed);
     }
+    public void stopIntake() {
+        leftIntake.setPower(0);
+        rightIntake.setPower(0);
+    }
     public void drive(double leftSpeed, double rightSpeed) {
         leftDrive.setPower(leftSpeed);
         rightDrive.setPower(rightSpeed);
@@ -106,6 +110,10 @@ public class Robot {
             Grab.setPower(grabSpeedRelease);
         }
     }
+    public void grabStop() {
+        Grab.setPower(0);
+    }
+
 
 
 

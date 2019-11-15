@@ -29,13 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
-import org.firstinspires.ftc.teamcode.Robot;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -116,8 +111,16 @@ public class Main extends OpMode{
         platformServoPickUp = gamepad2.a;
         platformServoPutDown = gamepad2.b;
 
-        robot.leftDrive.setPower(left);
-        robot.rightDrive.setPower(right);
+        if (left < 0.5 && left > -0.5) {
+            robot.leftDrive.setPower(left / 2);
+        } else {
+            robot.leftDrive.setPower(left);
+        }
+        if (right < 0.5 && right > -0.5) {
+            robot.rightDrive.setPower(right / 2);
+        } else {
+            robot.rightDrive.setPower(right);
+        }
         if (intake) {
             robot.leftIntake.setPower(1);
             robot.rightIntake.setPower(1);
@@ -141,12 +144,10 @@ public class Main extends OpMode{
         }
 
         if (platformServoPickUp) {
-            robot.platformGrabRight.setPosition(1);
-            robot.platformGrabLeft.setPosition(1);
+            robot.platformGrab.setPower(1);
         }
         else if (platformServoPutDown) {
-            robot.platformGrabLeft.setPosition(0);
-            robot.platformGrabRight.setPosition(0);
+            robot.platformGrab.setPower(-1);
         }
 
 
