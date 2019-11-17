@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Autonomous(name = "Autonomus Red", group = "Pushbot")
-public class Autonomus extends LinearOpMode {
+@Autonomous(name = "Autonomus Blue", group = "Pushbot")
+public class Autonomus2 extends LinearOpMode {
 
     static final double COUNTS_PER_INCH = 85.561697504;
 
@@ -56,49 +56,16 @@ public class Autonomus extends LinearOpMode {
         driveInches(0.5, -24.25, 200);
         robot.grabStop();
         robot.stopIntake();
-        driveInches(0.75, 12, 200);
-        turnDegrees(0.5, -45, 200);
-        driveInches(0.75, 22, 600);
+        driveInches(0.75, 18, 200);
+        turnDegrees(0.5, 45, 200);
+        driveInches(0.75, 18, 600);
         robot.intakeBlock();
         robot.grabControl(true, false);
-        sleep(600);
+        sleep(3000);
         robot.stopIntake();
         robot.grabStop();
-        //first block eject stop
-        driveInches(0.75, -34, 200);
-        turnDegrees(0.5, 60, 200);
-        robot.intakeBlock();
-        robot.grabControl(true, false);
-        driveInches(0.5, -12, 200);
-        driveInches(0.75, 12, 200);
-        robot.stopIntake();
-        robot.grabStop();
-        turnDegrees(0.75, -75, 200);
-        driveInches(0.5, 30, 200);
-        robot.leftIntake.setPower(-1);
-        robot.rightIntake.setPower(-1);
-        robot.grabControl(true, false);
-        driveInches(0.75, -34, 200);
-        robot.leftIntake.setPower(0);
-        robot.rightIntake.setPower(0);
-        turnDegrees(0.5, 75, 200);
-        //end of second block
-        robot.intakeBlock();
-        robot.grabControl(true, false);
-        driveInches(0.5, 18, 200);
-        driveInches(0.75, 45, 200);
-        robot.stopIntake();
-        robot.grabStop();
-        turnDegrees(0.5, 75, 200);
-        driveInches(0.75, 34, 200);
-        robot.ejectBlock();
-        robot.grabControl(true, false);
-        sleep(200);
-        robot.grabStop();
-        robot.stopIntake();
-        driveInches(0.75,-34, 200);
-        turnDegrees(0.5, 7665, 200);
-        //third block finished
+        driveInches(0.75, -6, 200);
+
 
 
 
@@ -163,10 +130,10 @@ public class Autonomus extends LinearOpMode {
 
             for (VuforiaTrackable trackable : allTrackables) {
                 *//**
-                 * getUpdatedRobotLocation() will return null if no new information is available since
-                 * the last time that call was made, or if the trackable is not currently visible.
-                 * getRobotLocation() will return null if the trackable is not currently visible.
-                 *//*
+         * getUpdatedRobotLocation() will return null if no new information is available since
+         * the last time that call was made, or if the trackable is not currently visible.
+         * getRobotLocation() will return null if the trackable is not currently visible.
+         *//*
                 telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
 
                 OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
@@ -175,8 +142,8 @@ public class Autonomus extends LinearOpMode {
                 }
             }
             *//**
-             * Provide feedback as to where the robot was last located (if we know).
-             *//*
+         * Provide feedback as to where the robot was last located (if we know).
+         *//*
             if (lastLocation != null) {
                 //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
                 telemetry.addData("Pos", format(lastLocation));

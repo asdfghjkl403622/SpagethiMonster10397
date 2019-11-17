@@ -144,10 +144,12 @@ public class Main extends OpMode{
         }
 
         if (platformServoPickUp) {
-            robot.platformGrab.setPower(1);
+            robot.platformGrab.setPower(0.25);
         }
         else if (platformServoPutDown) {
-            robot.platformGrab.setPower(-1);
+            robot.platformGrab.setPower(-0.25);
+        } else {
+            robot.platformGrab.setPower(0);
         }
 
 
