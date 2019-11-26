@@ -50,7 +50,7 @@ public class Autonomus extends LinearOpMode {
         robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        waitForStart();
+        /*waitForStart();
         robot.intakeBlock();
         robot.grabControl(true, false);
         driveInches(0.5, -24.25, 200);
@@ -98,7 +98,7 @@ public class Autonomus extends LinearOpMode {
         robot.stopIntake();
         driveInches(0.75,-34, 200);
         turnDegrees(0.5, 7665, 200);
-        //third block finished
+        //third block finished*/
 
 
 
@@ -106,7 +106,7 @@ public class Autonomus extends LinearOpMode {
 
 
 
-        /*int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AUdp9w7/////AAABmQrdl1rA/USMqEBXQO9JJz4xFKE6xJYmArNkGCIkzwRTnaULoN5KJZN8IRcQmi5Dmp4dA8xPcNjK1JLtL14tJXpgKrP0OGylaVeCU9oyuLD2jZy8D7lIc5wbmHwHDz0rmqomDn0QJbWKlQNNuT9WoAjgkQyXwHMT/MgvOnf44bqVsSrwyycBedZvMOtnyEATBEdLniSqS2PbhVbAEjAeoXBVRhL0kVEFF1PRNIECCmH1X7jRppoybSpOXhs6KFSIHuILAlh1ahyTG6fB/a8quO77T6NlQK7NeVlDxtzahAk7dkITN57neABwoimKBGm85uWEpk+w237AEzGLr8C74uOOU5+2lTDp84LJx4btB+S/";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -118,34 +118,34 @@ public class Autonomus extends LinearOpMode {
         VuforiaTrackable blueTarget  = stonesAndChips.get(1);
         blueTarget.setName("BlueTarget");  // Chips
 
-        *//** For convenience, gather together all the trackable objects in one easily-iterable collection *//*
+        //For convenience, gather together all the trackable objects in one easily-iterable collection
         List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
         allTrackables.addAll(stonesAndChips);
         float mmPerInch        = 25.4f;
         float mmBotWidth       = (float) (17.5 * mmPerInch);            // ... or whatever is right for your robot
         float mmFTCFieldWidth  = (12*12 - 2) * mmPerInch;   // the FTC field is ~11'10" center-to-center of the glass panels
         OpenGLMatrix redTargetLocationOnField = OpenGLMatrix
-                *//* Then we translate the target off to the RED WALL. Our translation here
-                is a negative translation in X.*//*
+                 //Then we translate the target off to the RED WALL. Our translation here
+                //is a negative translation in X.
                 .translation(-mmFTCFieldWidth/2, 0, 0)
                 .multiplied(Orientation.getRotationMatrix(
-                        *//* First, in the fixed (field) coordinate system, we rotate 90deg in X, then 90 in Z *//*
+                         //First, in the fixed (field) coordinate system, we rotate 90deg in X, then 90 in Z
                         AxesReference.EXTRINSIC, AxesOrder.XZX,
                         AngleUnit.DEGREES, 90, 90, 0));
         redTarget.setLocation(redTargetLocationOnField);
         RobotLog.ii(TAG, "Red Target=%s", format(redTargetLocationOnField));
 
-        *//*
-         * To place the Stones Target on the Blue Audience wall:
-         * - First we rotate it 90 around the field's X axis to flip it upright
-         * - Finally, we translate it along the Y axis towards the blue audience wall.
-         *//*
+
+         // To place the Stones Target on the Blue Audience wall:
+         //- First we rotate it 90 around the field's X axis to flip it upright
+         // - Finally, we translate it along the Y axis towards the blue audience wall.
+
         OpenGLMatrix blueTargetLocationOnField = OpenGLMatrix
-                *//* Then we translate the target off to the Blue Audience wall.
-                Our translation here is a positive translation in Y.*//*
+                 //Then we translate the target off to the Blue Audience wall.
+                //Our translation here is a positive translation in Y.
                 .translation(0, mmFTCFieldWidth/2, 0)
                 .multiplied(Orientation.getRotationMatrix(
-                        *//* First, in the fixed (field) coordinate system, we rotate 90deg in X *//*
+                         //First, in the fixed (field) coordinate system, we rotate 90deg in X
                         AxesReference.EXTRINSIC, AxesOrder.XZX,
                         AngleUnit.DEGREES, 90, 0, 0));
         blueTarget.setLocation(blueTargetLocationOnField);
@@ -162,11 +162,11 @@ public class Autonomus extends LinearOpMode {
         while (opModeIsActive()) {
 
             for (VuforiaTrackable trackable : allTrackables) {
-                *//**
-                 * getUpdatedRobotLocation() will return null if no new information is available since
+               // *
+                 /** getUpdatedRobotLocation() will return null if no new information is available since
                  * the last time that call was made, or if the trackable is not currently visible.
-                 * getRobotLocation() will return null if the trackable is not currently visible.
-                 *//*
+                 * getRobotLocation() will return null if the trackable is not currently visible.*/
+
                 telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
 
                 OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
@@ -174,9 +174,9 @@ public class Autonomus extends LinearOpMode {
                     lastLocation = robotLocationTransform;
                 }
             }
-            *//**
-             * Provide feedback as to where the robot was last located (if we know).
-             *//*
+           /* *
+             * Provide feedback as to where the robot was last located (if we know).*/
+
             if (lastLocation != null) {
                 //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
                 telemetry.addData("Pos", format(lastLocation));
@@ -184,7 +184,7 @@ public class Autonomus extends LinearOpMode {
                 telemetry.addData("Pos", "Unknown");
             }
             telemetry.update();
-        }*/
+        }
     }
 
 
