@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -34,6 +35,8 @@ public class AutonomusVisionTesting extends LinearOpMode {
     VuforiaLocalizer vuforia;
     OpenGLMatrix lastLocation = null;
     public static final String TAG = "Vuforia Navigation Sample";
+    Orientation             lastAngles = new Orientation();
+    double                  globalAngle, power = .30, correction;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,6 +52,12 @@ public class AutonomusVisionTesting extends LinearOpMode {
 
         robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        waitForStart();
+
+        gyroTurnDegrees(0.75, 90, 400);
+
+        sleep(6000);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AUdp9w7/////AAABmQrdl1rA/USMqEBXQO9JJz4xFKE6xJYmArNkGCIkzwRTnaULoN5KJZN8IRcQmi5Dmp4dA8xPcNjK1JLtL14tJXpgKrP0OGylaVeCU9oyuLD2jZy8D7lIc5wbmHwHDz0rmqomDn0QJbWKlQNNuT9WoAjgkQyXwHMT/MgvOnf44bqVsSrwyycBedZvMOtnyEATBEdLniSqS2PbhVbAEjAeoXBVRhL0kVEFF1PRNIECCmH1X7jRppoybSpOXhs6KFSIHuILAlh1ahyTG6fB/a8quO77T6NlQK7NeVlDxtzahAk7dkITN57neABwoimKBGm85uWEpk+w237AEzGLr8C74uOOU5+2lTDp84LJx4btB+S/";
@@ -221,24 +230,42 @@ public class AutonomusVisionTesting extends LinearOpMode {
     }
 
     public void gyroTurnDegrees(double speed, double degrees, double timeoutS) {
+        //credits to https://stemrobotics.cs.pdx.edu/node/7265 for giving example code
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
         //reset gyro
         sleep(100);
-        robot.gyro.calibrate();
-        while (robot.gyro.isCalibrating()) {
-            sleep(10);
+
+        while (!isStopRequested() && !robot.gyro.isGyroCalibrated())
+        {
+            sleep(50);
+            idle();
         }
 
         // reset the timeout time and start motion.
         runtime.reset();
-        robot.leftDrive.setPower(Math.abs(speed));
-        robot.rightDrive.setPower(Math.abs(speed));
+
+        if (degrees < 0) {
+            robot.leftDrive.setPower(-(Math.abs(speed)));
+            robot.rightDrive.setPower(Math.abs(speed));
+        }
+        if (degrees > 0) {
+            robot.leftDrive.setPower(Math.abs(speed));
+            robot.rightDrive.setPower(-(Math.abs(speed)));
+        }
+
 
 
         while (opModeIsActive() &&
                 (runtime.seconds() < timeoutS) &&
-                (degrees > robot.gyro.getHeading())) {
+                (degrees > getAngle())) {
             sleep(1);
+            telemetry.addData("Running: ",true);
+            telemetry.update();
         }
 
         // Stop all motion;
@@ -246,12 +273,34 @@ public class AutonomusVisionTesting extends LinearOpMode {
         robot.rightDrive.setPower(0);
 
         // Turn off RUN_TO_POSITION
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
     String format(OpenGLMatrix transformationMatrix) {
         return transformationMatrix.formatAsTransform();
+    }
+    private double getAngle()
+    {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = robot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
     }
 
 }
