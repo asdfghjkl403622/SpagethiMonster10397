@@ -219,6 +219,37 @@ public class AutonomusVisionTesting extends LinearOpMode {
         robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
+
+    public void gyroTurnDegrees(double speed, double degrees, double timeoutS) {
+
+        //reset gyro
+        sleep(100);
+        robot.gyro.calibrate();
+        while (robot.gyro.isCalibrating()) {
+            sleep(10);
+        }
+
+        // reset the timeout time and start motion.
+        runtime.reset();
+        robot.leftDrive.setPower(Math.abs(speed));
+        robot.rightDrive.setPower(Math.abs(speed));
+
+
+        while (opModeIsActive() &&
+                (runtime.seconds() < timeoutS) &&
+                (degrees > robot.gyro.getHeading())) {
+            sleep(1);
+        }
+
+        // Stop all motion;
+        robot.leftDrive.setPower(0);
+        robot.rightDrive.setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
     String format(OpenGLMatrix transformationMatrix) {
         return transformationMatrix.formatAsTransform();
     }

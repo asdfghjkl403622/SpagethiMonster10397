@@ -1,14 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 
 public class Robot2 {
     /* Public OpMode members. */
     public DcMotor  leftDrive   = null;
     public DcMotor  rightDrive  = null;
+    public ModernRoboticsI2cGyro gyro;
+    private ElapsedTime runtime = new ElapsedTime();
     //this identifies the servo motors and allows the phone to identify
     public static final double COUNTS_PER_INCH = 42.780848752;
 
@@ -29,10 +35,12 @@ public class Robot2 {
         // Define and Initialize Motors
         leftDrive  = hwMap.get(DcMotor.class, "left_drive");
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
+        gyro = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
 
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        gyro.calibrate();
         //this sets the input of the motors
 
 
@@ -57,4 +65,6 @@ public class Robot2 {
         leftDrive.setPower(leftSpeed);
         rightDrive.setPower(rightSpeed);
     }
+
+
 }

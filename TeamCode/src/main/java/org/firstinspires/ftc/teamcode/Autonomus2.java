@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -28,7 +29,7 @@ import java.util.List;
 public class Autonomus2 extends LinearOpMode {
 
     static final double COUNTS_PER_INCH = 85.561697504;
-
+    ElapsedTime timer = new ElapsedTime();
     Robot robot = new Robot();
     private ElapsedTime runtime = new ElapsedTime();
     VuforiaLocalizer vuforia;
@@ -37,8 +38,10 @@ public class Autonomus2 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+        boolean lastResetState = false;
+        boolean curResetState  = false;
         robot.init(hardwareMap);
+
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");
@@ -205,7 +208,6 @@ public class Autonomus2 extends LinearOpMode {
     public void turnDegrees(double speed, double degrees, double timeoutS) {
         int newLeftTarget;
         int newRightTarget;
-
         // Determine new target position, and pass to motor controller
         newLeftTarget = robot.leftDrive.getCurrentPosition() + (int) (((degrees / 360) * Math.PI * 17.5) * COUNTS_PER_INCH);
         newRightTarget = robot.rightDrive.getCurrentPosition() + (int) (((degrees / 360) * Math.PI * 17.5) * COUNTS_PER_INCH * -1);
