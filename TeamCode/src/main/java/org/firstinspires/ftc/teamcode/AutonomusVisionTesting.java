@@ -55,7 +55,7 @@ public class AutonomusVisionTesting extends LinearOpMode {
 
         waitForStart();
 
-        gyroTurnDegrees(0.75, 90, 400);
+        gyroTurnDegrees(0.10, 90, 400, 0.75);
 
         sleep(6000);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -229,8 +229,10 @@ public class AutonomusVisionTesting extends LinearOpMode {
 
     }
 
-    public void gyroTurnDegrees(double speed, double degrees, double timeoutS) {
+    public void gyroTurnDegrees(double speed, double degrees, double timeoutS, double decelorationRate) {
         //credits to https://stemrobotics.cs.pdx.edu/node/7265 for giving example code
+        double currentSpeed;
+        int counter;
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
         parameters.mode                = BNO055IMU.SensorMode.IMU;
@@ -249,23 +251,17 @@ public class AutonomusVisionTesting extends LinearOpMode {
         // reset the timeout time and start motion.
         runtime.reset();
 
-        if (degrees < 0) {
-            robot.leftDrive.setPower(-(Math.abs(speed)));
-            robot.rightDrive.setPower(Math.abs(speed));
-        }
-        if (degrees > 0) {
-            robot.leftDrive.setPower(Math.abs(speed));
-            robot.rightDrive.setPower(-(Math.abs(speed)));
-        }
 
-
-
+        currentSpeed = Math.abs(speed);
         while (opModeIsActive() &&
                 (runtime.seconds() < timeoutS) &&
-                (degrees > getAngle())) {
+                (Math.abs(degrees) >= Math.abs(getAngle()))) {
             sleep(1);
             telemetry.addData("Running: ",true);
+            telemetry.addData("current degrees: ", getAngle());
             telemetry.update();
+            robot.leftDrive.setPower(getPowerFromErr(degrees, speed, decelorationRate));
+            robot.rightDrive.setPower(getPowerFromErr(degrees, speed, decelorationRate));
         }
 
         // Stop all motion;
@@ -301,6 +297,17 @@ public class AutonomusVisionTesting extends LinearOpMode {
         lastAngles = angles;
 
         return globalAngle;
+    }
+    private double getPowerFromErr(double degrees, double speed, double decelorationPoint) {
+        double power;
+        double err;
+
+        err = degrees - getAngle();
+        if (err <= degrees * decelorationPoint) {
+            power = ((0 - speed) / (0 - (degrees * decelorationPoint))) * err;
+        }
+        power = speed;
+        return power;
     }
 
 }
