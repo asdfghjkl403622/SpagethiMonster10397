@@ -240,11 +240,9 @@ public class AutonomusVisionTesting extends LinearOpMode {
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled      = false;
         //reset gyro
-        sleep(100);
 
         while (!isStopRequested() && !robot.gyro.isGyroCalibrated())
         {
-            sleep(50);
             idle();
         }
 
