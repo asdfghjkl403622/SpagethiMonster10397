@@ -256,7 +256,6 @@ public class AutonomusVisionTesting extends LinearOpMode {
         while (opModeIsActive() &&
                 (runtime.seconds() < timeoutS) &&
                 (Math.abs(degrees) >= Math.abs(getAngle()))) {
-            sleep(1);
             telemetry.addData("Running: ",true);
             telemetry.addData("current degrees: ", getAngle());
             telemetry.update();
