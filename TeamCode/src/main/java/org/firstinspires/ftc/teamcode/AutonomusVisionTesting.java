@@ -57,7 +57,11 @@ public class AutonomusVisionTesting extends LinearOpMode {
 
         waitForStart();
 
-        gyroTurnDegrees(0.1, 45, 400, 0.75);
+        gyroTurnDegrees(0.1, 45, 400);
+        sleep(1000);
+        gyroTurnDegrees(0.1, 90, 400);
+        sleep(1000);
+        gyroTurnDegrees(0.1, 180, 600);
 
         sleep(6000);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -231,7 +235,7 @@ public class AutonomusVisionTesting extends LinearOpMode {
 
     }
 
-    public void gyroTurnDegrees(double speed, double targetDegrees, double timeoutS, double decelorationRate) {
+    public void gyroTurnDegrees(double speed, double targetDegrees, double timeoutS) {
         //credits to https://stemrobotics.cs.pdx.edu/node/7265 for giving example code
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -250,14 +254,16 @@ public class AutonomusVisionTesting extends LinearOpMode {
 
         // reset the timeout time and start motion.
         runtime.reset();
-        ElapsedTime turnTime = new ElapsedTime();
-        double pastAngle = 0;
-        double pastTime = 0;
-        double currentSpeed = 0;
-        double maxSpeed = 1;
-        ArrayList<Double> speeds = new ArrayList<>();
-        speeds.add((double) 0);
-        speeds.add((double) 0);
+//        ElapsedTime turnTime = new ElapsedTime();
+//        double pastAngle = 0;
+//        double pastTime = 0;
+//        double currentSpeed = 0;
+//        double maxSpeed = 1;
+//        ArrayList<Double> speeds = new ArrayList<>();
+//        speeds.add((double) 0);
+//        speeds.add((double) 0);
+        robot.leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
 
@@ -285,25 +291,25 @@ public class AutonomusVisionTesting extends LinearOpMode {
         while (opModeIsActive() &&
                 (runtime.seconds() < timeoutS) &&
                 (Math.abs(targetDegrees) != Math.abs(getAngle()))) {
-            currentSpeed = (getAngle() - pastAngle) / (turnTime.milliseconds() - pastTime);
-            pastTime = turnTime.milliseconds();
-            pastAngle = getAngle();
+//            currentSpeed = (getAngle() - pastAngle) / (turnTime.milliseconds() - pastTime);
+//            pastTime = turnTime.milliseconds();
+//            pastAngle = getAngle();
             telemetry.addData("Running: ",true);
             telemetry.addData("current degrees: ", getAngle());
-            telemetry.addData("the current speed in angles/miliseconds is:", currentSpeed);
-            telemetry.addData("elapsed time:", turnTime.milliseconds());
-            telemetry.addData("maxSpeed:", maxSpeed);
+//            telemetry.addData("the current speed in angles/miliseconds is:", currentSpeed);
+//            telemetry.addData("elapsed time:", turnTime.milliseconds());
+//            telemetry.addData("maxSpeed:", maxSpeed);
             telemetry.update();
-            speeds.add(currentSpeed);
-            if (speeds.get(speeds.size() - 1) < speeds.get(speeds.size() - 2)) {
-                maxSpeed = speeds.get(speeds.size() - 1);
-            }
+//            speeds.add(currentSpeed);
+//            if (speeds.get(speeds.size() - 1) < speeds.get(speeds.size() - 2)) {
+//                maxSpeed = speeds.get(speeds.size() - 1);
+//            }
             if(targetDegrees > 0) {
-                robot.leftDrive.setPower(getPowerFromErr(targetDegrees, speed, currentSpeed, maxSpeed));
-                robot.rightDrive.setPower(getPowerFromErr(targetDegrees, -speed, currentSpeed, maxSpeed));
+                robot.leftDrive.setPower(getPowerFromErr(targetDegrees, speed));
+                robot.rightDrive.setPower(getPowerFromErr(targetDegrees, -speed));
             } else if (targetDegrees < 0) {
-                robot.leftDrive.setPower(getPowerFromErr(targetDegrees, -speed, currentSpeed, maxSpeed));
-                robot.rightDrive.setPower(getPowerFromErr(targetDegrees, speed, currentSpeed, maxSpeed));
+                robot.leftDrive.setPower(getPowerFromErr(targetDegrees, -speed));
+                robot.rightDrive.setPower(getPowerFromErr(targetDegrees, speed));
             }
         }
 
@@ -311,6 +317,9 @@ public class AutonomusVisionTesting extends LinearOpMode {
         // Stop all motion;
         robot.leftDrive.setPower(0);
         robot.rightDrive.setPower(0);
+        //Turn off brake mode
+        robot.leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         // Turn off RUN_TO_POSITION
 //        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -342,13 +351,10 @@ public class AutonomusVisionTesting extends LinearOpMode {
 
         return globalAngle;
     }
-    private double getPowerFromErr(double targetDegrees, double speed, double currentSpeed, double maxSpeed) {
+    private double getPowerFromErr(double targetDegrees, double speed) {
         double err = targetDegrees - getAngle();
         double pct_error = err / targetDegrees;
         double power = speed * pct_error;
-        double speedPercentage = currentSpeed / maxSpeed;
-        double speedPercentageToPower = (1/speed) * speedPercentage;
-        power -= (speedPercentageToPower - power);
 //        if (err <= targetDegrees * decelorationPoint) {
 //            power = (power / (targetDegrees * decelorationPoint)) * err;
 //        }

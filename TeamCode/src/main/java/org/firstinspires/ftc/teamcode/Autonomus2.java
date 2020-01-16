@@ -55,18 +55,14 @@ public class Autonomus2 extends LinearOpMode {
 
         waitForStart();
         robot.intakeBlock();
-        robot.grabControl(true, false);
         driveInches(0.5, -24.25, 200);
-        robot.grabStop();
         robot.stopIntake();
         driveInches(0.75, 18, 200);
         turnDegrees(0.5, 45, 200);
         driveInches(0.75, 18, 600);
         robot.intakeBlock();
-        robot.grabControl(true, false);
         sleep(3000);
         robot.stopIntake();
-        robot.grabStop();
         driveInches(0.75, -6, 200);
 
 

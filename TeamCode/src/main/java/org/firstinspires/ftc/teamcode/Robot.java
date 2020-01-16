@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Robot {
@@ -12,8 +13,11 @@ public class Robot {
     //this identifies the servo motors and allows the phone to identify
     public DcMotor leftIntake = null;
     public DcMotor rightIntake = null;
-    public DcMotor Grab = null;
-    public DcMotor platformGrab = null;
+    public Servo foundationLeft = null;
+    public Servo foundationRight = null;
+    public CRServo slide = null;
+    public DcMotor winch = null;
+    public Servo claw = null;
     public static final double COUNTS_PER_INCH = 42.780848752;
 
 
@@ -42,10 +46,12 @@ public class Robot {
         //this renames the motors in the hardware map
         leftIntake = hwMap.get(DcMotor.class, "left_intake");
         rightIntake = hwMap.get(DcMotor.class, "right_intake");
-        //Define and initialize grab motor
-        Grab = hwMap.get(DcMotor.class, "Grab");
         //Define and initialize platform grabbing servos
-        platformGrab = hwMap.get(DcMotor.class, "platform_Grab");
+        foundationLeft = hwMap.get(Servo.class, "foundation_Left");
+        foundationRight = hwMap.get(Servo.class, "foundation_Right");
+        slide = hwMap.get(CRServo.class, "slide");
+        winch = hwMap.get(DcMotor.class, "winch");
+        claw = hwMap.get(Servo.class, "claw");
 
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
@@ -53,10 +59,11 @@ public class Robot {
         //this sets the input of the motors
         leftIntake.setDirection(DcMotor.Direction.FORWARD);
         rightIntake.setDirection(DcMotor.Direction.REVERSE);
-        //Sets motor directions for the grab motors
-        Grab.setDirection(DcMotor.Direction.FORWARD);
         //set platform grab motor directions
-        platformGrab.setDirection(DcMotor.Direction.FORWARD);
+        foundationLeft.setDirection(Servo.Direction.FORWARD);
+        slide.setDirection(CRServo.Direction.FORWARD);
+        winch.setDirection(DcMotor.Direction.FORWARD);
+        claw.setDirection(Servo.Direction.FORWARD);
 
 
         // Set all motors to zero power
@@ -64,8 +71,7 @@ public class Robot {
         rightDrive.setPower(0);
         leftIntake.setPower(0);
         rightIntake.setPower(0);
-        Grab.setPower(0);
-        platformGrab.setPower(0);
+        winch.setPower(0);
 
 
 
@@ -75,8 +81,7 @@ public class Robot {
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Grab.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        platformGrab.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        winch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
 
@@ -102,16 +107,7 @@ public class Robot {
         rightDrive.setPower(rightSpeed);
     }
 
-    public void grabControl(boolean grab, boolean release) {
-        if (grab) {
-            Grab.setPower(grabSpeedGrab);
-        }
-        if (release) {
-            Grab.setPower(grabSpeedRelease);
-        }
-    }
-    public void grabStop() {
-        Grab.setPower(0);
+
     }
 
 
@@ -119,4 +115,4 @@ public class Robot {
 
 
 
-}
+

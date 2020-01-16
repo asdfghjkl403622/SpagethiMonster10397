@@ -96,21 +96,55 @@ public class Main extends OpMode{
         double eject;
         double left;
         double right;
-        boolean agitatorIntake;
-        double agitatorEject;
-        boolean platformServoPickUp;
-        boolean platformServoPutDown;
+        boolean foundationServoPickUp;
+        boolean foundationServoPutDown;
+        boolean winchUp;
+        boolean winchDown;
+        boolean clawGrab;
+        boolean clawRelease;
+        boolean slideForward;
+        boolean slideBackward;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
         intake = gamepad2.right_bumper;
         eject = gamepad2.right_trigger;
-        agitatorIntake = gamepad2.left_bumper;
-        agitatorEject = gamepad2.left_trigger;
-        platformServoPickUp = gamepad2.a;
-        platformServoPutDown = gamepad2.b;
+        foundationServoPickUp = gamepad2.x;
+        foundationServoPutDown = gamepad2.y;
+        winchUp = gamepad2.dpad_up;
+        winchDown = gamepad2.dpad_down;
+        clawGrab = gamepad2.a;
+        clawRelease = gamepad2.b;
+        slideForward = gamepad2.dpad_left;
+        slideBackward = gamepad2.dpad_right;
 
+        if (slideForward) {
+            robot.slide.setPower(100);
+        } else if ((!slideBackward) && (!slideForward)) {
+            robot.slide.setPower(0);
+        }
+        if (slideBackward) {
+            robot.slide.setPower(-100);
+        } else if ((!slideBackward) && (!slideForward)) {
+            robot.slide.setPower(0);
+        }
+        if (winchUp) {
+            robot.winch.setPower(1);
+        } else if ((!winchDown) && (!winchUp)) {
+            robot.winch.setPower(0);
+        }
+        if (winchDown) {
+            robot.winch.setPower(-1);
+        } else if ((!winchDown) && (!winchUp)) {
+            robot.winch.setPower(0);
+        }
+        if (clawGrab) {
+            robot.claw.setPosition(1);
+        }
+        if (clawRelease) {
+            robot.claw.setPosition(0.3);
+        }
         if (left < 0.5 && left > -0.5) {
             robot.leftDrive.setPower(left / 2);
         } else {
@@ -133,23 +167,13 @@ public class Main extends OpMode{
             robot.leftIntake.setPower(0);
         }
 
-        if (agitatorIntake) {
-            robot.Grab.setPower(-1);
+        if (foundationServoPickUp) {
+            robot.foundationLeft.setPosition(0.7);
+            robot.foundationRight.setPosition(0.7);
         }
-        else if (agitatorEject > (Math.PI / 30)) {
-            robot.Grab.setPower(1);
-        }
-        else {
-            robot.Grab.setPower(0);
-        }
-
-        if (platformServoPickUp) {
-            robot.platformGrab.setPower(0.25);
-        }
-        else if (platformServoPutDown) {
-            robot.platformGrab.setPower(-0.25);
-        } else {
-            robot.platformGrab.setPower(0);
+        else if (foundationServoPutDown) {
+            robot.foundationLeft.setPosition(-0.1);
+            robot.foundationRight.setPosition(-0.1);
         }
 
 
